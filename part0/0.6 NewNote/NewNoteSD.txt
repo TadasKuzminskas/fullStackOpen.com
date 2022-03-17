@@ -1,0 +1,21 @@
+Sequence diagram can be accessed in:
+https://www.websequencediagrams.com/
+
+by pasting in:
+{
+title Sequense Diagram
+
+actor user
+
+browser -> server : HTTP GET
+
+server --> browser : HTTP receive HTML-code
+
+user -> browser: message
+
+browser -> server: message - write(put()) (JSON)
+
+server --> browser : HTTP GET - receive(get()) (JSON)
+
+browser -> browser : messageDisplayedUponRefresh
+}

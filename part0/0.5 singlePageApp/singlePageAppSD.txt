@@ -1,0 +1,14 @@
+Sequence diagram can be accessed in:
+https://www.websequencediagrams.com/
+
+by pasting in:
+{
+title Sequense Diagram
+
+actor user
+
+browser -> server : HTTP GET
+
+server --> browser : HTTP receive HTML-code
+
+}
