@@ -1,6 +1,6 @@
 
 // const http = require('http')
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 const express = require('express')
 const app = express();
 const bp = require('body-parser')
@@ -103,7 +103,7 @@ app.post('/api/persons', morgan(':url :req[header] :body' ), (request, response)
 
 })
 
-app.listen(PORT, ()=> {
+app.listen(process.env.PORT, ()=> {
     console.log(`server running on port ${PORT}`)
 })
 
