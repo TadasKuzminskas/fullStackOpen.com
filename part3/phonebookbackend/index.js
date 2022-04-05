@@ -1,5 +1,5 @@
 
-// const http = require('http')
+const http = require('http')
 const PORT = process.env.PORT || 3001
 const express = require('express')
 const app = express();
@@ -43,6 +43,7 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
+
 
 app.get('/', (request, response) => {
     response.send('<h1>Server running</h1>')
@@ -105,9 +106,7 @@ app.post('/api/persons', morgan(':url :req[header] :body' ), (request, response)
 
 })
 
-app.listen(process.env.PORT, ()=> {
+// app.listen(PORT)
+app.listen(PORT, ()=> {
     console.log(`server running on port ${PORT}`)
 })
-
-
-
