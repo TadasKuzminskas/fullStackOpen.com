@@ -17,6 +17,8 @@ app.use(bp.json()) //Had to add these in order for json body parsing to work.
 app.use(bp.urlencoded({ extended: true }))
 app.use(morgan('tiny')) //Hopefully this is how it was expected to implement the middleware
 
+app.use(express.static('build'))
+
 
 
 let persons = [
