@@ -92,7 +92,8 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         }).catch(error => { //this could be updated further by removing removing the person on the updateing clients side, but I bet we will go round that later, so I won't go into that
-          setMessage(`ERROR: '${updatablePerson[0].name}' was already removed from the server`)
+          //setMessage(`ERROR: '${updatablePerson[0].name}' was already removed from the server`)
+          setMessage(error.response.data.error)
           setTimeout(() => {setMessage('')}, 2000)
           setNewName('')
           setNewNumber('')

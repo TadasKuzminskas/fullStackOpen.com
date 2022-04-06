@@ -23,7 +23,7 @@ const personSchema = new mongoose.Schema({
     minLength: 9,
     validate: {
       validator: function(v) {
-        return /\d{3}-\d{x}/.test(v) || /\d{2}-\d{5}/.test(v); //Made it work, but I'm not sure I understand it. Did not find anything about formatting on the web.
+        return /\d{3}-\d{x}/.test(v) || /\d{2}-\d{5}/.test(v) //Made it work, but I'm not sure I understand it. Did not find anything about formatting on the web.
       },
       message: props => `${props.value} is not a valid phone number!`
     },
