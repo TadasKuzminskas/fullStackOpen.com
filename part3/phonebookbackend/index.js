@@ -1,14 +1,22 @@
 
-const http = require('http')
 const PORT = process.env.PORT || 3001
 const express = require('express')
 const app = express();
 const bp = require('body-parser')
 const morgan = require('morgan')
 
+
 //Adding Cors to Bypass CORS policy
 const cors = require('cors')
 app.use(cors())
+
+
+//MongoDB definition
+
+
+
+const Person = require('./models/person');
+const { default: mongoose } = require('mongoose');
 
 // Source - https://stackoverflow.com/questions/51409771/logging-post-body-size-using-morgan-when-request-is-received
 morgan.token('body', (req, res) => JSON.stringify(req.body));
@@ -16,33 +24,10 @@ morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(bp.json()) //Had to add these in order for json body parsing to work. 
 app.use(bp.urlencoded({ extended: true }))
 app.use(morgan('tiny')) //Hopefully this is how it was expected to implement the middleware
-
 app.use(express.static('build'))
 
 
 
-let persons = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
 
 
 app.get('/', (request, response) => {
@@ -50,7 +35,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(person => {
+        response.json(person)
+      })
 })
 
 app.get('/info', (request, response) => {
@@ -60,53 +47,74 @@ app.get('/info', (request, response) => {
     response.send(`<h3>Phonebook has info for ${infoPeople} people <br> ${date} </h3>`)
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    console.log('id ', id)
-    const person = persons.find(person => person.id === id)
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
+app.get('/api/persons/:id', (request, response, next) => {
+    Person.findById(request.params.id).then(person => {
+        if (person) {
+            response.json(person)
+        } else {
+            response.status(404).end()
+        }
+      }).catch(error => {
+          next(error)
+      })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-    response.status(204).end()
+
+
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', morgan(':url :req[header] :body' ), (request, response) => {
+app.post('/api/persons', morgan(':url :req[header] :body' ), (request, response, next) => {
     const body = request.body
-    var id = Math.floor(Math.random() * 1000) //hope this is what was requested. 
-    if (!body.name) {
-        return response.status(400).json({
-            error: 'name is missing'
-        })
-    } else if (!body.number) {
-        return response.status(400).json({
-            error: 'number is missing'
-        })
-    } else if ((persons.filter(person => person.name === body.name)).length) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
-    const person = {
-        id: id,
-        name: body.name,
-        number: body.number
-    }
-
-    persons = persons.concat(person)
-
-    response.json(person)
+  
+    const person = new Person({
+      name: body.name,
+      number: body.number,
+    })
+    person.save().then(savedPerson => {
+      response.json(savedPerson)
+    }).catch(error => next(error))
 
 })
 
-// app.listen(PORT)
+app.put('/api/persons/:id', (request, response, next) => {
+    const {name, number} = request.body
+
+    Person.findByIdAndUpdate(request.params.id,
+        { name, number },
+        { new: true, runValidators: true, context: 'query'})
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error =>
+        console.log(error => next(error))
+    )
+})
+
 app.listen(PORT, ()=> {
     console.log(`server running on port ${PORT}`)
 })
+
+//Error handler setup
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+  }
+  app.use(unknownEndpoint)
+
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if (error.name === "CastError") {
+        return response.status(400).send({error: 'malformed id'})
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
+    }
+    next(error)
+}
+app.use(errorHandler)

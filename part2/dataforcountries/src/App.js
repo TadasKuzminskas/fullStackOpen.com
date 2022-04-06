@@ -1,8 +1,6 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 
-
-
 const SearchFilter = ({handleFilter}) => {
   return <form>
     <div>find countries <input onChange={handleFilter}/></div>

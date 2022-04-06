@@ -2,13 +2,18 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import personsService from './personsService'
 
-const Notification = ({message, newName}) => {
-  if (message === '') {
+const Notification = ({message, newName}) => { 
+  if (!message) {
     return null
-  } else if (message.includes("ERROR")) {
+  } else if (message.includes('Error')) {
     return <div className='error'>{message}</div>
   }
-  return <div className='personChange'>{message}</div>
+  else if (message.includes('validation')) {  //There has to be a better way to go around this red/green listing
+    return <div className='error'>{message}</div>
+  } else if (message.includes(newName)) {
+    return <div className='personChange'>{message}</div>
+  }
+  return <div className='error'>{message}</div>
 
 }
 
@@ -103,6 +108,11 @@ const App = () => {
       setPersons(persons.concat(response.data))
       console.log('person added: ', newName)
       setMessage(`person '${newName}' has been added to the list`)
+      setTimeout(() => {setMessage('')}, 2000)
+      setNewName('')
+      setNewNumber('')
+    }).catch(error => {
+      setMessage(error.response.data.error)
       setTimeout(() => {setMessage('')}, 2000)
       setNewName('')
       setNewNumber('')
