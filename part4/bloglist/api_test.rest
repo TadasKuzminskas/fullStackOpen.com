@@ -1,0 +1,59 @@
+PUT http://localhost:3003/api/blogs/62555982ae1f5b42a3b1ed6c HTTP/1.1
+content-type: application/json
+
+{
+        "title": "Go To Statement Considered Harmful",
+        "author": "Edsger W. Dijkstra",
+        "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+        "likes": 5
+}
+
+
+###
+
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvRG9lIiwiaWQiOiI2MjU2YWE0Yjk0MzI4ZWNkM2M2Njc4YWEiLCJpYXQiOjE2NDk4NTI5NDR9.i2tz1Cc5RNllnklLCWI7UhsV6pQ1TR5EuYsOwVGk6vw
+
+{
+        "title": "Test4",
+        "author": "Edsger W. Dijkstra",
+        "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+        "likes": 5
+}
+
+### 
+
+DELETE http://localhost:3003/api/blogs/6256cfc99a23944986a87ffc HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvRG9lIiwiaWQiOiI2MjU2YWE0Yjk0MzI4ZWNkM2M2Njc4YWEiLCJpYXQiOjE2NDk4NTU1NTV9.EXcJ9b540zdHAWl37qodm5326F3eeN9Jgemt6tUjo08
+
+###
+
+GET http://localhost:3003/api/blogs
+
+
+###
+
+GET http://localhost:3003/api/users
+
+###
+
+POST http://localhost:3003/api/users HTTP/1.1
+content-type: application/json
+
+{
+        "username": "JoDoe",
+        "name": "John Doe",
+        "password": "password123"
+}
+
+###
+
+POST http://localhost:3003/api/login HTTP/1.1
+content-type: application/json
+
+{
+        "username": "JoDoe",
+        "password": "password123"
+}
