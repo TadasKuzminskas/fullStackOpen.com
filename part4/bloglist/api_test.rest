@@ -57,3 +57,9 @@ content-type: application/json
         "username": "JoDoe",
         "password": "password123"
 }
+
+###
+
+DELETE http://localhost:3000/api/blogs/62580f169f7256b0cd6dc472 HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvRG9lIiwiaWQiOiI2MjU2YWE0Yjk0MzI4ZWNkM2M2Njc4YWEiLCJpYXQiOjE2NDk4NTU1NTV9.EXcJ9b540zdHAWl37qodm5326F3eeN9Jgemt6tUjo08

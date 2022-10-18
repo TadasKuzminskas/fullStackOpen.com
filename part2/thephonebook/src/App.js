@@ -14,7 +14,6 @@ const Notification = ({message, newName}) => {
     return <div className='personChange'>{message}</div>
   }
   return <div className='error'>{message}</div>
-
 }
 
 const Numbers = ({persons, filterName, deleteNumber}) => {
